@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Memos{% endblock %}
+
+<p style="font-size=28;"> Now You Can Edit Your Memo: </p>
+
+{% block page_content %}
+
+<div>
+    {{wtf.quick_form(form)}}
+</div>
+
+{% endblock %}

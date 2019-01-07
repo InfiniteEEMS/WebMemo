@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Memos{% endblock %}
+
+
+
+{% block page_content %}
+
+<form name="myForm" >
+The Place You Want to Search <input type="text" id="palceform">
+<button type="button" onclick="delAndSearch()">Search</button>
+</form>
+
+<div id="GoogleMap" style=" margin-top: 25px; margin-bottom:25px; width:600px;height:400px;"></div>
+
+<div>
+    {{wtf.quick_form(form)}}
+</div>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+{{ super() }}
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJW4jsPlNKgv6jFm3B5Edp5ywgdqLWdmc&libraries=places&callback=initMap" async defer></script>
+
+<script>
+    var map;
+    var service;
+    var markers=[];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('GoogleMap'), {
+            center: {lat: 34.030, lng: -118.150},
+            zoom: 15
+        });
+        if (navigator.geolocation) { 
+          console.log(' Browser support geolocation '); 
+          navigator.geolocation.getCurrentPosition(setToUserLocation,null); 
+        }else{ 
+          console.log(' Browser doesnt support geolocation '); 
+        } 
+        var request = {
+          query: 'Viterbi School',
+          fields: ['photos', 'formatted_address', 'name', 'geometry'],
+        };
+        service = new google.maps.places.PlacesService(map);
+        service.findPlaceFromQuery(request, callback);
+     }
+
+     function setToUserLocation(position) {
+       var coords = position.coords; 
+       var latlng = new google.maps.LatLng(coords.latitude, coords.longitude); 
+       map.setCenter(latlng);
+       var marker = new google.maps.Marker({map:map})
+       marker.setPosition(latlng);
+       marker.setMap(map);
+       marker.addListener('click', function() {
+         if(marker.getAnimation()==null)
+           marker.setAnimation(google.maps.Animation.BOUNCE);
+         else
+           marker.setAnimation(null); 
+         document.getElementById("placename").value="My Home";
+         document.getElementById("lat").value=marker.getPosition().lat();
+         document.getElementById("lng").value=marker.getPosition().lng();           
+       });
+     } 
+
+     function callback(results, status) {
+       if (status == google.maps.places.PlacesServiceStatus.OK) {
+         for (var i = 0; i < results.length; i++) {
+           var place = results[i];
+           var marker = new google.maps.Marker({map:map, position:results[i].geometry.location})
+           marker.setMap(map);
+           marker.setTitle(results[i].name);
+           markers.push(marker);
+           marker.addListener('click', function() {
+             if(marker.getAnimation()==null)
+                 marker.setAnimation(google.maps.Animation.BOUNCE);
+             else
+                 marker.setAnimation(null);
+             document.getElementById("placename").value=marker.getTitle();
+             document.getElementById("lat").value=marker.getPosition().lat();
+             document.getElementById("lng").value=marker.getPosition().lng();           
+           });
+         }
+       }
+     }
+
+     function delAndSearch() {
+        for (var i = 0; i < markers.length; i++) {   
+            markers[i].setMap(null);   
+        }   
+        markers = [];  
+        var request = {
+            query: document.getElementById("palceform").value,
+            fields: ['photos', 'formatted_address', 'name', 'geometry'],
+        };
+        service.findPlaceFromQuery(request, callback);
+     }
+
+</script>
+{% endblock %}
+
+
+

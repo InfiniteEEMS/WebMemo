@@ -1,0 +1,33 @@
+ul.memos {
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+    border-top: 1px solid #CD5C5C;
+    width:500px;
+}
+li.memo{
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e0e0e0;
+}
+li.memo:hover {
+    background-color: #e0e0e0;
+}
+div.memotime {
+    float: right;
+    font-size: 20px;
+}
+span.memotitle {
+    font-weight: bold;
+    font-size:16px;
+}
+div.memobody{
+    min-height: 48px;
+    padding-bottom: 48px;
+    font-size:  20px;
+}
+div.memoplacename{
+    font-size:16px;
+}
+.ComingNext{
+    margin-top: 30px;
+    font-size: 30px;
+}

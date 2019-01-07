@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Memos{% endblock %}
+
+
+
+{% block page_content %}
+
+<div>
+    {{wtf.quick_form(form)}}
+</div>
+
+
+
+<p class="ComingNext"> What's Coming Up Next? <p>
+
+<table style="margin-bottom:100px">
+<tr>
+<td style="vertical-align:top;">
+<ul class="list-group memos" >
+    {% for memo in memos %}
+    <li class="memo list-group-item">
+         <span class="memotitle"> {{memo.title}} </span>
+         <div class="memotime"> {{memo.time}} </div> 
+         <div class="memobody"> {{memo.body}} </div>
+         <div class="memoplacename"> {{memo.placename}} </div>
+         <div>
+             <a href="{{url_for('main.edit',memo_id=memo.id)}}">
+	         <span class="btn btn-success"> Edit</span>
+             </a>
+             <a href="{{url_for('main.edit_latlng',memo_id=memo.id)}}">
+                 <span class="btn btn-info"> Edit Position</span>
+             </a>
+	     <a href="{{url_for('main.delete_memo',memo_id=memo.id)}}">
+	         <span class="btn btn-danger"> Delete</span>
+             </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+</td>
+
+<td style="vertical-align:top;">
+<div id="GoogleMap" style=" width:500px; height:380px; margin-left:100px;"></div>
+</td>
+</tr>
+</table>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+{{ super() }}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJW4jsPlNKgv6jFm3B5Edp5ywgdqLWdmc&callback=initMap" async defer></script>
+<script>
+    var map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('GoogleMap'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 15
+        });
+        var marker;  
+        var latlngbounds = new google.maps.LatLngBounds();
+
+        {% for memo in memos %}
+        marker = new google.maps.Marker({position:{lat:{{memo.lat}}, lng: {{memo.lng}}}, map: map});
+        marker.setMap(map);
+        latlngbounds.extend(marker.getPosition())
+        {% endfor %}
+ 
+        map.fitBounds(latlngbounds);     
+}
+</script>
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+    <h2>The local time is: {{moment(current_time).format('LLL')}}<h2>
+</div>
+
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('main.user',username=current_user.username) }}">Go To My Center</a>
+{% else %}
+{% endif %}
+
+{% endblock %}
