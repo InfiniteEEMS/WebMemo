@@ -9,7 +9,7 @@ Here are some screenshots of the website:
 ![image](https://github.com/InfiniteEEMS/WebMemo/raw/master/screen_shots/user_center.png)
 
 ## Destination Search
-![image](https://github.com/InfiniteEEMS/WebMemo/raw/master/screen_shots/destination_Search.png)
+![image](https://github.com/InfiniteEEMS/WebMemo/raw/master/screen_shots/destination_search.png)
 
 
 
